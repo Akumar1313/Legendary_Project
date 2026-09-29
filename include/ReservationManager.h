@@ -14,19 +14,19 @@ class ReservationManager{
     public:
         ReservationManager();
         ~ReservationManager();
-        Reservation * reservptr;
+        
 
-
+            Reservation * reservptr;
             list<Reservation*> currentReservation;
             stack<Reservation*> cancellationStack;
-            stack<Reservation*> tempStack;
             queue<Reservation*> waitingQueue;
+            vector<Resource> resources;
 
-                void viewResources(const vector<Resource > ResourceVector)const;
+                void viewResources()const;
                 void createReservation();
-                void cancelReservaton(string ResourceID, const Reservation* ReservationList);
-                void waitingList(const Reservation* waitingqueue)const;
-                void undoReservation(const Reservation* ReservationList, const Reservation* cancellationStack);
+                void cancelReservaton(int  ReservationID);
+                void waitingList()const;
+                void undoReservation(int ResrvationID);
                 void searchReservation(int ReservationID)const;
                 void sortResources();
                 void generateReport()const;

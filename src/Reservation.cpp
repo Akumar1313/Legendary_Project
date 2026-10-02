@@ -4,35 +4,38 @@
 using namespace std;
 
 /* Initializing default constructor and fully parameterized constructor */
-Reservation::Reservation() : ReservationID(0),
-                             StudentID(0),
+Reservation::Reservation() : ReservationID(""),
+                             StudentID(""),
                              ResourceID(""),
                              Name("NONE"),
                              ReservationDate("0/0/00") {}
 
-Reservation::Reservation(int ReservationID, int StudentID, string ResourceID, string Name, string ReservationDate) : ReservationID(ReservationID),
-                                                                                                                     StudentID(StudentID),
-                                                                                                                     ResourceID(ResourceID),
-                                                                                                                     Name(Name),
-                                                                                                                     ReservationDate(ReservationDate) {}
+Reservation::Reservation(string ReservationID, string StudentID,string ResourceID, string Name,string ReservationDate)
+{
+    this->ReservationID = ReservationID;
+	this->StudentID = StudentID;
+	this->ResourceID = ResourceID;
+	this->Name = Name;
+    this->ReservationDate = ReservationDate;
+}
 
 // Initializing getters and setters here
-int Reservation::get_ReservationID() const
+string Reservation::get_ReservationID() const
 {
     return ReservationID;
 }
 
-void Reservation::set_ReservationID(int ReservationID)
+void Reservation::set_ReservationID(string ReservationID)
 {
     this->ReservationID = ReservationID;
 }
 
-int Reservation::get_StudentID() const
+string Reservation::get_StudentID() const
 {
     return StudentID;
 }
 
-void Reservation::set_StudentID(int StudentID)
+void Reservation::set_StudentID(string StudentID)
 {
     this->StudentID = StudentID;
 }

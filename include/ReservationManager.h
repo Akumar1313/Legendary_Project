@@ -10,28 +10,29 @@
 using namespace std;
 
 class ReservationManager{
+    private:
+        Reservation * reservptr;
+        list<Reservation*> currentReservation;
+        stack<Reservation*> cancellationStack;
+        queue<Reservation*> waitingQueue;
 
     public:
         ReservationManager();
         ~ReservationManager();
-        
 
-            Reservation * reservptr;
-            list<Reservation*> currentReservation;
-            stack<Reservation*> cancellationStack;
-            queue<Reservation*> waitingQueue;
-            vector<Resource> resources;
+        void viewResources()const;
+        void createReservation(string,string,string,string,string);
+        void cancelReservaton(string  ReservationID);
+        void waitingList()const;
+        void undoReservation(string ResrvationID);
+        void searchReservation(string ReservationID)const;
+        void sortResources();
+        void generateReport()const;
+        void printReservatonInfo(Reservation*)const;
+        bool loadResourcesFromFile(string fileName);
+        bool loadReservationsFromFile(string fileName);
 
-                void viewResources()const;
-                void createReservation();
-                void cancelReservaton(int  ReservationID);
-                void waitingList()const;
-                void undoReservation(int ResrvationID);
-                void searchReservation(int ReservationID)const;
-                void sortResources();
-                void generateReport()const;
-
-                void Run();
+        void Run();
 };
 
 #endif

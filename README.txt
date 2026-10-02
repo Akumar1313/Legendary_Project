@@ -44,9 +44,8 @@ Project 1-
     Reservation.cpp
     ReservationManager.cpp
     Resource.cpp
-    ResourceManager.cpp
   README.md
 
   ## How to compile
 
-Compile: g++ Main.cpp Reservation.cpp ReservationManager.cpp Resource.cpp ResourceManager.cpp -o main
+Compile: g++ Main.cpp Reservation.cpp ReservationManager.cpp Resource.cpp -o main

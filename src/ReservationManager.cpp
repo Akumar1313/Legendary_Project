@@ -7,7 +7,7 @@
 #include <string>;
 using namespace std;
 
-vector<Resource> resources;
+// vector<Resource> resources;
 ReservationManager::ReservationManager() {}; // Default constructor
 
 // DESTRUCTOR
@@ -33,53 +33,53 @@ ReservationManager::~ReservationManager()
 bool ReservationManager::loadResourcesFromFile(string fileName)
 {
     ifstream fin1;
-	fin1.open(fileName);
-	
-	if (fin1.fail())
-	{
-		cout << "File error" << endl;
-		return false; // error of file-reading
-	}
+    fin1.open(fileName);
 
-	string id, name, type, status;
-	while (getline(fin1, id, '|'))
-	{
-		getline(fin1, name, '|'); // reads until '|' excluding this character
-		getline(fin1, type, '|');
-		getline(fin1, status); // read until enter/space
-		
-		Resource resource(id, name, type, status);
-		resources.push_back(resource);
-	}
-	
-	// close resources
-	fin1.close();
-	// successful reading
-	return true;
+    if (fin1.fail())
+    {
+        cout << "File error" << endl;
+        return false; // error of file-reading
+    }
+
+    string id, name, type, status;
+    while (getline(fin1, id, '|'))
+    {
+        getline(fin1, name, '|'); // reads until '|' excluding this character
+        getline(fin1, type, '|');
+        getline(fin1, status); // read until enter/space
+
+        Resource resource(id, name, type, status);
+        resources.push_back(resource);
+    }
+
+    // close resources
+    fin1.close();
+    // successful reading
+    return true;
 }
 /*File reading logic for Reservation and */
 
 bool ReservationManager::loadReservationsFromFile(string fileName)
 {
     ifstream fin2;
-	fin2.open(fileName);
-	
-	if (fin2.fail())
-	{
-		cout << "File error" << endl;
-		return false; // error of file-reading
-	}
+    fin2.open(fileName);
 
-	string ReservationID, StudentID;
+    if (fin2.fail())
+    {
+        cout << "File error" << endl;
+        return false; // error of file-reading
+    }
+
+    string ReservationID, StudentID;
     string Name, ResourceID, ReservationDate;
-	while (getline(fin2, ReservationID, '|'))
-	{
-		getline(fin2, StudentID, '|'); // reads until '|' excluding this character
-		getline(fin2, Name, '|');
+    while (getline(fin2, ReservationID, '|'))
+    {
+        getline(fin2, StudentID, '|'); // reads until '|' excluding this character
+        getline(fin2, Name, '|');
         getline(fin2, ResourceID, '|');
-		getline(fin2, ReservationDate); // read until enter/space
-		
-		//Reservation reservation(ReservationID, StudentID, ResourceID, Name, ReservationDate);
+        getline(fin2, ReservationDate); // read until enter/space
+
+        // Reservation reservation(ReservationID, StudentID, ResourceID, Name, ReservationDate);
         createReservation(ReservationID, StudentID, ResourceID, Name, ReservationDate);
     }
     // close resources
@@ -88,10 +88,9 @@ bool ReservationManager::loadReservationsFromFile(string fileName)
     return true;
 }
 
-
 /*Just a basic print function which will accept a pointer object in it's parameter
 and then would print out the reservation Information for that object*/
-void ReservationManager::printReservatonInfo(Reservation* tempreservationptr)const
+void ReservationManager::printReservatonInfo(Reservation *tempreservationptr) const
 {
     cout << "Name is : " << tempreservationptr->get_Name()
          << "Reservation Data is : " << tempreservationptr->get_ReservationDate()
@@ -120,72 +119,41 @@ void ReservationManager::viewResources() const
 
 void ReservationManager::createReservation(string ReservationID, string StudentID, string ResourceID, string Name, string ReservationDate)
 {
-    /*Here we will ask the user first to input all the required
-    input; then we will check if the resourceId is available
-    base on the status of resourceID we will either push the reservation into the
-    ReservationList(linked list) or we could add the reservation info to the waiting queue */
+    Reservation *reservptr = new Reservation(
+        ReservationID,
+        StudentID,
+        ResourceID,
+        Name,
+        ReservationDate);
 
 
-    
-
-    // int ReservationID;
-    // int StudentID;
-    // string ResourceID;
-    // string Name;
-    // string ReservationDate;
-
-    // cout << "Enter the Reservation ID : " << endl;
-    // cin >> ReservationID;
-
-    // cout << "Enter the Student ID : " << endl;
-    // cin >> StudentID;
-
-    // cout << "Enter the Resource ID : " << endl;
-    // cin >> ResourceID;
-
-    // cin.ignore();
-
-    // cout << "Enter student Name : " << endl;
-    // getline(cin, Name);
-
-    // cout << "Enter the Reservation Date : " << endl;
-    // getline(cin, ReservationDate);
-
-    /*this is logic which determins if the reservation is added to the linked list or queue*/
-    Reservation* reservptr;
-    bool resourceFound = false;
-    
-    for (int i = 0; i < (int)resources.size(); i++)
-    {
-        if (resources[i].getResourceID() == ResourceID)
-        {
-            /*creating a Reservation class pointer; and using DMA to store the info*/
-            reservptr = new Reservation(ReservationID,
-                                        StudentID,
-                                        ResourceID,
-                                        Name,
-                                        ReservationDate);
-            resourceFound = true;
-            if (resources[i].getAvailabilityStatus() == "Available")
-            {
-                currentReservation.push_back(reservptr);
-                cout << "Reservation sucessfully made!";
-            }
-            else
-            {
-                cout << "Resource ID : " << ResourceID
-                     << "is currently unavailable!. Putting your request in a wating queue!" << endl;
-                waitingQueue.push(reservptr);
-            }
-            break;
-        }
-    }
-    if (!resourceFound)
-    {
-        cout << "Requested Resource was not available or invalid!" << endl;
-    }
 }
 
+void ReservationManager::createReservation()
+{
+    string ReservationID;
+    string StudentID;
+    string ResourceID;
+    string Name;
+    string ReservationDate;
+
+    cout << "Enter Reservation ID : ";
+    getline(cin, ReservationID);
+
+    cout << "Student ID : ";
+    getline(cin, StudentID);
+
+    cout << "Resource ID : ";
+    getline(cin, ResourceID);
+
+    cout << "Name : ";
+    getline(cin, Name);
+
+    cout << "Reservation Date : ";
+    getline(cin, ReservationDate);
+
+    createReservation(ReservationID, StudentID, ResourceID, Name, ReservationDate);
+}
 
 void ReservationManager::cancelReservaton(string ReservationID)
 {
@@ -210,9 +178,28 @@ void ReservationManager::cancelReservaton(string ReservationID)
         cout << "Reservation Not found... Please try again!" << endl;
         return;
     }
-
     cancellationStack.push(cancelNode);
     currentReservation.remove(cancelNode);
+    queue<Reservation *> tempqueue;
+    while (!waitingQueue.empty())
+    {
+        if (waitingQueue.front()->get_ResourceID() == cancelNode->get_ResourceID())
+        {
+            currentReservation.push_back(waitingQueue.front());
+            waitingQueue.pop();
+            break;
+        }
+        else
+        {
+            tempqueue.push(waitingQueue.front());
+        }
+        waitingQueue.pop();
+    }
+    while (!tempqueue.empty())
+    {
+        waitingQueue.push(tempqueue.front());
+        tempqueue.pop();
+    }
 }
 
 /*Here I've created a temp queue;
@@ -231,69 +218,13 @@ void ReservationManager::waitingList() const
     }
 }
 
-void ReservationManager::undoReservation(string ReservationID)
+void ReservationManager::undoReservation()
 {
-    /*For the undo function, We first create a temp stack which we can use to iterator over
-    and find the requestion ReservationNumber and not loose the original data in the cancellation stack,
-     also create a temp Reservation class pointer
-    to store the reservation which holds the requestion Reservation ID
-    if the reservation is found successfully then we would push_back that into the Reservatio Linkedlist
-    */
-    stack<Reservation *> tempstack = cancellationStack;
-    Reservation *undoptr;
-    bool reservationFound = false;
-    while (!tempstack.empty())
+    /*Here as per assignment requirement we are just restoring the most recent cancellation*/
+    if (!cancellationStack.empty())
     {
-        undoptr = tempstack.top();
-        if (undoptr->get_ReservationID() == ReservationID)
-        {
-            reservationFound = true;
-            cout << "Resrevation found... Restoring Reservation..." << endl;
-            currentReservation.push_back(undoptr);
-            break;
-        }
-        tempstack.pop();
-    }
-
-    /*If the reservation actually exist then do the original stack object removal process else just print the
-    message that Reservation Don't exist!*/
-    if (reservationFound)
-    {
-        /*Clearing whole temp stack here; so I could use it again to get rid of
-        reservation which got cancled and pop that reservation from the original cancellationStack*/
-        while (!tempstack.empty())
-        {
-            tempstack.pop();
-        }
-
-        /*Here im going to iterate the whole cancellationStack and find for that
-        specific reservationId to pop it out if the stack; if the reservation is not found, we would
-        keep in iterating and poping the cancellation stack data to push into tempstack, so we don't loose
-        the required data for the original temp stack*/
-        while (!cancellationStack.empty())
-        {
-            if (cancellationStack.top()->get_ReservationID() == ReservationID)
-            {
-                cancellationStack.pop();
-                break;
-            }
-            else
-            {
-                tempstack.push(cancellationStack.top());
-                cancellationStack.pop();
-            }
-        }
-        /*When we have succesfully poped the reservation from the original cancellation stack
-        we would then copy the stored data from tempstack to cancellationstack*/
-        while (!tempstack.empty())
-        {
-            cancellationStack.push(tempstack.top());
-            tempstack.pop();
-        }
-    }
-    else
-    {
-        cout << "Reservation is either invalid or doesn't exist in the system!" << endl;
+        currentReservation.push_back(cancellationStack.top());
+        cancellationStack.pop();
     }
 }
 
@@ -364,9 +295,7 @@ void ReservationManager::Run()
             break;
 
         case 5:
-            cout << "Enter the Reservation ID : ";
-            getline(cin, ReservationID);
-            undoReservation(ReservationID);
+            undoReservation();
             break;
 
         case 6:

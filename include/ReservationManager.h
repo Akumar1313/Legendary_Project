@@ -15,6 +15,7 @@ class ReservationManager{
         list<Reservation*> currentReservation;
         stack<Reservation*> cancellationStack;
         queue<Reservation*> waitingQueue;
+        vector<Resource> resources;
 
     public:
         ReservationManager();
@@ -22,9 +23,10 @@ class ReservationManager{
 
         void viewResources()const;
         void createReservation(string,string,string,string,string);
+        void createReservation();
         void cancelReservaton(string  ReservationID);
         void waitingList()const;
-        void undoReservation(string ResrvationID);
+        void undoReservation();
         void searchReservation(string ReservationID)const;
         void sortResources();
         void generateReport()const;

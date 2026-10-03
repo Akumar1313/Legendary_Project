@@ -1,5 +1,5 @@
-#ifndef RESERVATIONMANAGER.H
-#define RESERVATIONMANAGER.H
+#ifndef RESERVATIONMANAGER_H
+#define RESERVATIONMANAGER_H
 #include <stack>
 #include <list>
 #include <string>
@@ -11,7 +11,6 @@ using namespace std;
 
 class ReservationManager{
     private:
-        Reservation * reservptr;
         list<Reservation*> currentReservation;
         stack<Reservation*> cancellationStack;
         queue<Reservation*> waitingQueue;

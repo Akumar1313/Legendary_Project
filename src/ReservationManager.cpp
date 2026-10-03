@@ -4,8 +4,10 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include <string>;
+#include <string>
 using namespace std;
+
+int ReservationCounter =0;// Keeps track of the number of active reservations
 
 // vector<Resource> resources;
 ReservationManager::ReservationManager() {}; // Default constructor
@@ -16,7 +18,7 @@ ReservationManager::~ReservationManager()
     /*Here we are deleting Dma initilized stuff Linkedlist data, Stack data, and Waiting Queue data*/
     for (auto ptr : currentReservation)
     {
-        delete ptr;
+        delete ptr; // Delete 
     }
     while (!cancellationStack.empty())
     {
@@ -117,6 +119,12 @@ void ReservationManager::viewResources() const
     }
 }
 
+
+/*This is the key function;
+first we will iterate over the Resources Vector to make sure that User input ResourceID is valid 
+Then we will check for id duplicate by iterating the linked list to make sure we don't create duplicate reservations
+and if the reservation is not duplicate then we will check for availiblity status and based on that we will
+determin wether the reservation goes to the Reservation linked list or waiting queue!*/
 void ReservationManager::createReservation(string ReservationID, string StudentID, string ResourceID, string Name, string ReservationDate)
 {
     Reservation *reservptr = new Reservation(
@@ -126,8 +134,45 @@ void ReservationManager::createReservation(string ReservationID, string StudentI
         Name,
         ReservationDate);
 
+    bool resourceFound = false;
 
+    for (int i = 0; i < resources.size(); i++)
+    {
+        if (resources[i].getResourceID() == ResourceID)
+        {
+            resourceFound = true;
+
+            for (auto ptr : currentReservation)
+            {
+                if (ptr->get_ReservationID() == ReservationID)
+                {
+                    cout << "Can't add duplicate Reservations ID; please try again!" << endl;
+                    delete reservptr;
+                    return;
+                }
+            }
+            if (resources[i].getAvailabilityStatus() == "Available")
+            {
+                currentReservation.push_back(reservptr);
+                ReservationCounter++;
+            }
+            else
+            {
+                waitingQueue.push(reservptr);
+            }
+        }
+    }
+    if (!resourceFound)
+    {
+        cout << "Invalid Resource ID!; please try again!" << endl;
+        delete reservptr;
+        return;
+    }
 }
+
+/*This is the same function as Create Reservation but this one is for user inputs 
+so this would actually ask user for inputs one by one and then send those inputed data to the other 
+create Reservation Function to futher check for validity!*/
 
 void ReservationManager::createReservation()
 {
@@ -155,13 +200,15 @@ void ReservationManager::createReservation()
     createReservation(ReservationID, StudentID, ResourceID, Name, ReservationDate);
 }
 
+/* Here I create an object holder called cancelNode which will hold the pointer
+to the reservation that the user wants to cancel.
+If the reservation they want to cancel is successfully found,
+we save that reservation pointer to cancelNode and break out of the loop.
+Then we push that pointer to the cancellation stack and remove it
+from the original linked list. */
 void ReservationManager::cancelReservaton(string ReservationID)
 {
-    /*Here I create a object holder cancelNode which would hold the data for
-    the Reservatio ID which the user wants to cancel.
-    and if the reservation they would like to cancel is
-    succesfully found we would save that reservation node to the cancelNode and break out of the loop.
-    Then push that copyed node to the cancellation stack then remove it from the original linked list!*/
+
     Reservation *cancelNode = NULL;
 
     for (auto ptr : currentReservation)
@@ -180,12 +227,15 @@ void ReservationManager::cancelReservaton(string ReservationID)
     }
     cancellationStack.push(cancelNode);
     currentReservation.remove(cancelNode);
+    ReservationCounter--;
+
     queue<Reservation *> tempqueue;
     while (!waitingQueue.empty())
     {
         if (waitingQueue.front()->get_ResourceID() == cancelNode->get_ResourceID())
         {
             currentReservation.push_back(waitingQueue.front());
+            ReservationCounter++;
             waitingQueue.pop();
             break;
         }
@@ -217,20 +267,21 @@ void ReservationManager::waitingList() const
         tempqueue.pop();
     }
 }
-
+  /*Here as per assignment requirement we are just restoring the most recent cancellation; 
+  which will be sitting in Cancellationstack top*/
 void ReservationManager::undoReservation()
 {
-    /*Here as per assignment requirement we are just restoring the most recent cancellation*/
     if (!cancellationStack.empty())
     {
         currentReservation.push_back(cancellationStack.top());
+        ReservationCounter++;
         cancellationStack.pop();
     }
 }
 
 /* Here I'm using Linear Search to find the requested ID by the user
 We would iterate over the whole linked list and if the Reservation ID matches with the one we are looking for
-we would send that objects pointer to the object!*/
+we would send that objects pointer to the print Function!*/
 void ReservationManager::searchReservation(string ReservationID) const
 {
     cout << "Serching for Reservation : " << ReservationID << "..." << endl;

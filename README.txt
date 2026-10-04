@@ -40,7 +40,7 @@ Project 1-
     Resource.h
     ResourceManager.h
   src - 
-    Main.cpp
+    main.cpp
     Reservation.cpp
     ReservationManager.cpp
     Resource.cpp
@@ -48,4 +48,4 @@ Project 1-
 
   ## How to compile
 
-Compile: g++ Main.cpp Reservation.cpp ReservationManager.cpp Resource.cpp -o main
+Compile: g++ main.cpp Reservation.cpp ReservationManager.cpp Resource.cpp -o main

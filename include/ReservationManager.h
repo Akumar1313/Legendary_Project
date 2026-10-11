@@ -21,13 +21,13 @@ class ReservationManager{
         ~ReservationManager();
 
         void viewResources()const;
-        void createReservation(string,string,string,string,string);
+        void createReservation(int,int,string,string,Date);
         void createReservation();
-        void cancelReservaton(string  ReservationID);
+        void cancelReservaton(int  ReservationID);
         void waitingList()const;
         void undoReservation();
-        void searchReservation(string ReservationID)const;
-        void sortResources();
+        void searchReservation(int ReservationID)const;
+        //void sortResources();
         void generateReport()const;
         void printReservatonInfo(Reservation*)const;
         bool loadResourcesFromFile(string fileName);
